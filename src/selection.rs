@@ -1,13 +1,21 @@
 use std::iter::FromIterator;
-use std::marker::PhantomData;
+use std::marker::{Copy, PhantomData};
 use std::ops::{BitAnd, BitOr};
 
 use croaring::Bitmap;
 
-#[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Row<T> {
     value: u32,
     _marker: PhantomData<T>,
+}
+
+impl<T> Copy for Row<T> {}
+
+impl<T> Clone for Row<T> {
+    fn clone(&self) -> Self {
+        *self
+    }
 }
 
 impl<T> Row<T> {
@@ -18,7 +26,7 @@ impl<T> Row<T> {
         }
     }
 
-    pub fn as_index(&self) -> usize {
+    pub fn as_index(self) -> usize {
         self.value as usize
     }
 
@@ -29,7 +37,7 @@ impl<T> Row<T> {
         }
     }
 
-    fn as_u32(&self) -> u32 {
+    fn as_u32(self) -> u32 {
         self.value
     }
 }

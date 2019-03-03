@@ -102,8 +102,8 @@ where
     }
 
     pub fn update<F: Fn(&mut T)>(&mut self, row: Row<T>, update: F) {
-        let mut item = self.retrieve(row.clone());
-        self.indexer.remove(row.clone(), &item);
+        let mut item = self.retrieve(row);
+        self.indexer.remove(row, &item);
         update(&mut item);
         self.indexer.add(row, &item);
     }

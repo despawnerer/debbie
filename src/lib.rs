@@ -39,22 +39,22 @@ mod tests {
     // TODO: this should be trivially derivable
     impl Indexer<Person> for PersonIndexer {
         fn add(&mut self, row: Row<Person>, item: &Person) {
-            self.by_id.add(row.clone(), item);
-            self.by_last_name.add(row.clone(), item);
-            self.adults.add(row.clone(), item);
+            self.by_id.add(row, item);
+            self.by_last_name.add(row, item);
+            self.adults.add(row, item);
         }
 
         fn remove(&mut self, row: Row<Person>, item: &Person) {
-            self.by_id.remove(row.clone(), item);
-            self.by_last_name.remove(row.clone(), item);
-            self.adults.remove(row.clone(), item);
+            self.by_id.remove(row, item);
+            self.by_last_name.remove(row, item);
+            self.adults.remove(row, item);
         }
     }
 
     impl Selector<'_, Person> {
         fn by_id(&mut self, id: u32) -> &mut Self {
             match self.indexer.by_id.get(&id) {
-                Some(row) => self.only_row((*row).clone()),
+                Some(row) => self.only_row(*row),
                 None => self.none(),
             }
         }
