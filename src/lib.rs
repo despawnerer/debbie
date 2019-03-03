@@ -52,18 +52,18 @@ mod tests {
     }
 
     impl Selector<'_, Person> {
-        fn by_id(&self, id: u32) -> Self {
+        fn by_id(&mut self, id: u32) -> &mut Self {
             match self.indexer.by_id.get(&id) {
                 Some(row) => self.only_row((*row).clone()),
                 None => self.none(),
             }
         }
 
-        fn by_last_name(&self, last_name: &str) -> Self {
+        fn by_last_name(&mut self, last_name: &str) -> &mut Self {
             self.and(self.indexer.by_last_name.get(&last_name.to_string()))
         }
 
-        fn adults(&self) -> Self {
+        fn adults(&mut self) -> &mut Self {
             self.and(self.indexer.adults.get())
         }
     }

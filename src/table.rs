@@ -24,28 +24,25 @@ where
 {
     // selecting
 
-    pub fn and(&self, selection: &Selection<T>) -> Self {
+    pub fn and(&mut self, selection: &Selection<T>) -> &mut Self {
         self.only(&self.selection & selection)
     }
 
-    pub fn or(&self, selection: &Selection<T>) -> Self {
+    pub fn or(&mut self, selection: &Selection<T>) -> &mut Self {
         self.only(&self.selection | selection)
     }
 
-    pub fn none(&self) -> Self {
+    pub fn none(&mut self) -> &mut Self {
         self.only(Selection::empty())
     }
 
-    pub fn only_row(&self, row: Row<T>) -> Self {
+    pub fn only_row(&mut self, row: Row<T>) -> &mut Self {
         self.only(Selection::of_row(row))
     }
 
-    pub fn only(&self, selection: Selection<T>) -> Self {
-        Self {
-            selection,
-            indexer: self.indexer,
-            table: self.table,
-        }
+    pub fn only(&mut self, selection: Selection<T>) -> &mut Self {
+        self.selection = selection;
+        self
     }
 
     // operations on the selected items
