@@ -1,6 +1,6 @@
 use std::iter::FromIterator;
 use std::marker::{Copy, PhantomData};
-use std::ops::{BitAnd, BitOr};
+use std::ops::{BitAnd, BitOr, BitAndAssign, BitOrAssign};
 
 use croaring::Bitmap;
 
@@ -116,6 +116,18 @@ impl<T> BitOr for &Selection<T> {
 
     fn bitor(self, rhs: Self) -> Self::Output {
         Selection::from_bitmap(&self.bitmap | &rhs.bitmap)
+    }
+}
+
+impl<T> BitAndAssign<&Selection<T>> for Selection<T> {
+    fn bitand_assign(&mut self, rhs: &Selection<T>) {
+        self.bitmap.and_inplace(&rhs.bitmap);
+    }
+}
+
+impl<T> BitOrAssign<&Selection<T>> for Selection<T> {
+    fn bitor_assign(&mut self, rhs: &Selection<T>) {
+        self.bitmap.or_inplace(&rhs.bitmap);
     }
 }
 

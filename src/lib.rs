@@ -6,7 +6,7 @@ pub mod table;
 mod tests {
     use crate::index::{BooleanIndex, DiscreteIndex, Index, UniqueIndex};
     use crate::selection::Row;
-    use crate::table::{Indexer, Selectable, Selector, Table};
+    use crate::table::{Indexer, Query, Selectable, Table};
 
     #[derive(Debug, Clone)]
     struct Person {
@@ -51,20 +51,23 @@ mod tests {
         }
     }
 
-    impl Selector<'_, Person> {
+    impl<X> Query<Person, X>
+    where
+        X: AsRef<Table<Person>>,
+    {
         fn by_id(&mut self, id: u32) -> &mut Self {
-            match self.indexer.by_id.get(&id) {
+            match self.indexer().by_id.get(&id) {
                 Some(row) => self.only_row(*row),
                 None => self.none(),
             }
         }
 
         fn by_last_name(&mut self, last_name: &str) -> &mut Self {
-            self.and(self.indexer.by_last_name.get(&last_name.to_string()))
+            self.and(&self.indexer().by_last_name.get(&last_name.to_string()).clone())
         }
 
         fn adults(&mut self) -> &mut Self {
-            self.and(self.indexer.adults.get())
+            self.and(&self.indexer().adults.get().clone())
         }
     }
 
@@ -131,5 +134,31 @@ mod tests {
 
         assert_eq!(babies.len(), 1);
         assert_eq!(babies[0].id, 3);
+    }
+
+    #[test]
+    fn updating_saves_new_info() {
+        let mut people = people();
+        let aleksei = people.select().by_id(1).first().unwrap();
+        assert_eq!(aleksei.age, 28);
+
+        people.update().by_id(1).apply(|p| p.age = 29);
+        let aleksei = people.select().by_id(1).first().unwrap();
+        assert_eq!(aleksei.age, 29);
+    }
+
+    #[test]
+    fn updating_updates_indexes() {
+        let mut people = people();
+
+        let voronov = people.select().by_last_name("Voronov").first().unwrap();
+        assert_eq!(voronov.last_name, "Voronov");
+
+        people.update().by_last_name("Voronov").apply(|p| p.last_name = "Smith".to_string());
+
+        let voronov = people.select().by_last_name("Voronov").first();
+        let smith = people.select().by_last_name("Smith").first();
+        assert!(voronov.is_none());
+        assert!(smith.is_some());
     }
 }
