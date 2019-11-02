@@ -29,8 +29,8 @@ where
         }
     }
 
-    pub fn get(&self, value: &V) -> Option<&Row<T>> {
-        self.rows.get(value)
+    pub fn get(&self, value: &V) -> Option<Row<T>> {
+        self.rows.get(value).copied()
     }
 }
 

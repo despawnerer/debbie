@@ -57,7 +57,7 @@ mod tests {
     {
         fn by_id(&mut self, id: u32) -> &mut Self {
             match self.indexer().by_id.get(&id) {
-                Some(row) => self.only_row(*row),
+                Some(row) => self.only_row(row),
                 None => self.none(),
             }
         }
