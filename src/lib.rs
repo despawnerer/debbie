@@ -26,24 +26,23 @@ mod tests {
         adults: BooleanIndex<Person>,
     }
 
-    impl Default for PersonIndexer {
-        fn default() -> Self {
-            PersonIndexer {
+    impl Indexer<Person> for PersonIndexer {
+        fn new() -> Self {
+            Self {
                 by_id: UniqueIndex::new(|person| person.id),
                 by_last_name: DiscreteIndex::new(|person| &person.last_name),
                 adults: BooleanIndex::new(|person| person.age >= 18),
             }
         }
-    }
 
-    // TODO: this should be trivially derivable
-    impl Indexer<Person> for PersonIndexer {
+        // TODO: this can be derivable, or implemented through reflection?
         fn add(&mut self, row: Row<Person>, item: &Person) {
             self.by_id.add(row, item);
             self.by_last_name.add(row, item);
             self.adults.add(row, item);
         }
 
+        // TODO: this can be derivable, or implemented through reflection?
         fn remove(&mut self, row: Row<Person>, item: &Person) {
             self.by_id.remove(row, item);
             self.by_last_name.remove(row, item);

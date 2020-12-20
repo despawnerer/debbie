@@ -6,7 +6,8 @@ pub trait Selectable: Clone {
     type Indexer: Indexer<Self>;
 }
 
-pub trait Indexer<T>: Default {
+pub trait Indexer<T> {
+    fn new() -> Self;
     fn add(&mut self, row: Row<T>, item: &T);
     fn remove(&mut self, row: Row<T>, item: &T);
 }
@@ -98,7 +99,7 @@ where
     }
 }
 
-#[derive(Default, Debug)]
+#[derive(Debug)]
 pub struct Table<T>
 where
     T: Selectable,
@@ -132,7 +133,7 @@ where
     pub fn in_memory() -> Self {
         Table {
             items: Vec::new(),
-            indexer: T::Indexer::default(),
+            indexer: T::Indexer::new(),
         }
     }
 
