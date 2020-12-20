@@ -56,10 +56,7 @@ mod tests {
         X: AsRef<Table<Person>>,
     {
         fn by_id(&mut self, id: u32) -> &mut Self {
-            match self.indexer().by_id.get(&id) {
-                Some(row) => self.only_row(row),
-                None => self.none(),
-            }
+            self.maybe_only_row(self.indexer().by_id.get(&id))
         }
 
         fn by_last_name(&mut self, last_name: &str) -> &mut Self {

@@ -52,6 +52,13 @@ where
         self
     }
 
+    pub fn maybe_only_row(&mut self, maybe_row: Option<Row<T>>) -> &mut Self {
+        match maybe_row {
+            Some(row) => self.only_row(row),
+            None => self.none(),
+        }
+    }
+
     pub fn only(&mut self, selection: Selection<T>) -> &mut Self {
         self.selection = selection;
         self
