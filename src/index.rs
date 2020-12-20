@@ -1,3 +1,4 @@
+use std::borrow::Borrow;
 use std::collections::HashMap;
 use std::hash::Hash;
 
@@ -29,7 +30,11 @@ where
         }
     }
 
-    pub fn get(&self, value: &V) -> Option<Row<T>> {
+    pub fn get<Q>(&self, value: &Q) -> Option<Row<T>>
+    where
+        V: Borrow<Q>,
+        Q: Eq + Hash + ?Sized,
+    {
         self.rows.get(value).copied()
     }
 }
@@ -70,7 +75,11 @@ where
         }
     }
 
-    pub fn get(&self, value: &V) -> &Selection<T> {
+    pub fn get<Q>(&self, value: &Q) -> &Selection<T>
+    where
+        V: Borrow<Q>,
+        Q: Eq + Hash + ?Sized,
+    {
         self.selections.get(value).unwrap_or(&self.empty)
     }
 }

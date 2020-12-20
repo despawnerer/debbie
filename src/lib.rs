@@ -63,7 +63,7 @@ mod tests {
         }
 
         fn by_last_name(&mut self, last_name: &str) -> &mut Self {
-            self.and(&self.indexer().by_last_name.get(&last_name.to_string()).clone())
+            self.and(&self.indexer().by_last_name.get(last_name).clone())
         }
 
         fn adults(&mut self) -> &mut Self {
