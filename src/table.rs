@@ -12,6 +12,14 @@ pub trait Indexer<T> {
     fn remove(&mut self, row: Row<T>, item: &T);
 }
 
+pub struct EmptyIndexer;
+
+impl<T> Indexer<T> for EmptyIndexer {
+    fn new() -> Self { Self }
+    fn add(&mut self, _: Row<T>, _: &T) {}
+    fn remove(&mut self, _: Row<T>, _: &T) {}
+}
+
 #[derive(Clone, Debug)]
 pub struct Query<T, X>
 where

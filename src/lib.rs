@@ -6,7 +6,16 @@ pub mod table;
 mod tests {
     use crate::index::{BooleanIndex, DiscreteIndex, Index, UniqueIndex};
     use crate::selection::Row;
-    use crate::table::{Indexer, Query, Selectable, Table};
+    use crate::table::{Indexer, EmptyIndexer, Query, Selectable, Table};
+
+    #[derive(Clone)]
+    struct UnindexedThing {
+        id: u32,
+    }
+
+    impl Selectable for UnindexedThing {
+        type Indexer = EmptyIndexer;
+    }
 
     #[derive(Debug, Clone)]
     struct Person {
