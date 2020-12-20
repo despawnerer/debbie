@@ -1,6 +1,6 @@
 use std::iter::FromIterator;
 use std::marker::{Copy, PhantomData};
-use std::ops::{BitAnd, BitOr, BitAndAssign, BitOrAssign};
+use std::ops::{BitAnd, BitAndAssign, BitOr, BitOrAssign};
 
 use croaring::Bitmap;
 
