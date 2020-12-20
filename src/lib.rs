@@ -67,6 +67,13 @@ mod tests {
         }
     }
 
+    // writing methods
+    impl Query<Person, &mut Table<Person>> {
+        fn increase_age(&mut self) {
+            self.apply(|p| p.age += 1);
+        }
+    }
+
     fn people() -> Table<Person> {
         let mut table = Table::in_memory();
 
@@ -130,6 +137,14 @@ mod tests {
 
         assert_eq!(babies.len(), 1);
         assert_eq!(babies[0].id, 3);
+    }
+
+    #[test]
+    fn can_use_custom_mut_methods() {
+        let mut people = people();
+        people.update().increase_age();
+        let aleksei = people.select().by_id(1).first().unwrap();
+        assert_eq!(aleksei.age, 29);
     }
 
     #[test]
