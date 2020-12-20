@@ -165,7 +165,10 @@ mod tests {
         let voronov = people.select().by_last_name("Voronov").first().unwrap();
         assert_eq!(voronov.last_name, "Voronov");
 
-        people.update().by_last_name("Voronov").apply(|p| p.last_name = "Smith".to_string());
+        people
+            .update()
+            .by_last_name("Voronov")
+            .apply(|p| p.last_name = "Smith".to_string());
 
         let voronov = people.select().by_last_name("Voronov").first();
         let smith = people.select().by_last_name("Smith").first();
