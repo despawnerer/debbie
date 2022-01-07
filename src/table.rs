@@ -15,7 +15,9 @@ pub trait Indexer<T> {
 pub struct EmptyIndexer;
 
 impl<T> Indexer<T> for EmptyIndexer {
-    fn new() -> Self { Self }
+    fn new() -> Self {
+        Self
+    }
     fn add(&mut self, _: Row<T>, _: &T) {}
     fn remove(&mut self, _: Row<T>, _: &T) {}
 }
