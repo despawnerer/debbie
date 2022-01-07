@@ -5,4 +5,4 @@ name = "debbie"
 version = "0.0.1"
 
 [dependencies]
-croaring = "0.4.5"
+croaring = "0.5.1"
